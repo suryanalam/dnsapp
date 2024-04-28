@@ -17,7 +17,7 @@ const Login = () => {
     console.log("data from login form", data);
 
     try {
-      const resp = await axios.post(`http://localhost:5000/login`, data);
+      const resp = await axios.post(`https://dnsapp-iulk.onrender.com/login`, data);
       console.log("login data from response", resp);
 
       if (resp?.data?.token) {

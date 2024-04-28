@@ -54,7 +54,7 @@ const RecordModal = ({ open, handleClose }) => {
     let updatedRecords = [];
 
     let resp = await axios.post(
-      "http://localhost:5000/records/",
+      "https://dnsapp-iulk.onrender.com/records/",
       data,
       options
     );
@@ -78,7 +78,7 @@ const RecordModal = ({ open, handleClose }) => {
 
   const handleUpdateRecord = async (data) => {
     let resp = await axios.put(
-      `http://localhost:5000/records/${record._id}`,
+      `https://dnsapp-iulk.onrender.com/records/${record._id}`,
       data,
       options
     );

@@ -25,7 +25,7 @@ const Records = () => {
   };
 
   const { loading, error, data } = useFetch(
-    "http://localhost:5000/records/",
+    "https://dnsapp-iulk.onrender.com/records/",
     token
   );
 
