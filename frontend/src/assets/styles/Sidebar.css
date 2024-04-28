@@ -1,0 +1,29 @@
+.sidebar-bg {
+  padding: 2rem 1rem;
+  /* width: 20dvw; */
+  height: 90dvh;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  box-shadow: 0 0 3px var(--clr-black-light);
+  background-color: var(--clr-white-dark);
+}
+
+.navlink {
+  width: 100%;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: var(--fs-x-small);
+  transition: all 0.2s ease-in-out;
+}
+
+.navlink:hover {
+  background-color: var(--clr-bg);
+}

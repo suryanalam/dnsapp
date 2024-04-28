@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --clr-primary: #275ab2;
+  --clr-bg: rgba(39, 90, 178, 0.2);
+  --clr-secondary: #7ca6f0;
+  --clr-white-dark: #fff;
+  --clr-white-light: #f0f0f0;
+  --clr-black-dark: #000;
+  --clr-black-light: #262626;
+  --clr-grey-dark: #808080;
+  --clr-grey-light: #b5b5b5;
+
+  --fs-x-large: 2.5rem;
+  --fs-large: 2rem;
+  --fs-medium: 1.25rem;
+  --fs-small: 1rem;
+  --fs-x-small: 0.75rem;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+li{
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+  color: var(--clr-primary);
+  font-size: var(--fs-small);
+}
+
+button {
+  border: 0;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: var(--fs-small);
+  color: var(--clr-white-dark);
+  background-color: var(--clr-primary);
+  transition: all 0.2s ease-in-out;
+}
+
+button:active {
+  transform: scale(0.9);
+}
+
+.alert {
+  font-weight: 500;
+  font-size: var(--fs-small);
+  color: #f00;
+}
+
+.app-bg {
+  /* This height is used for spacer and header as well */
+  --header-height: 10dvh;
+
+  width: 100dvw;
+  width: 100%;
+  min-height: 100dvh;
+  color: var(--clr-black-light);
+  background-color: var(--clr-white-light);
+}
+
+.main-container {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 2rem;
+}
+
+.spacer {
+  width: 100%;
+  height: var(--header-height);
+}
+

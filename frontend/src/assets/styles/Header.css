@@ -1,0 +1,41 @@
+.header-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 1rem;
+  width: 100%;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--clr-white-dark);
+  box-shadow: 0 0 3px var(--clr-black-light);
+}
+
+.logo {
+  font-size: var(--fs-medium);
+  color: var(--clr-primary);
+}
+
+.header-action-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.greeting-msg {
+  font-size: var(--fs-small);
+  font-style: italic;
+}
+
+.greeting-msg > span {
+  font-weight: 600;
+  color: var(--clr-primary);
+}
+
+.logout-btn {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: var(--fs-x-small);
+}

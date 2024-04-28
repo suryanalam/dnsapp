@@ -1,0 +1,62 @@
+.dashboard-bg {
+  margin-top: 2rem;
+  width: 80dvw;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.featured-card-bg {
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(4, 1fr);
+  background-color: transparent;
+  grid-gap: 2rem;
+}
+
+.featured-card-div {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: var(--clr-white-dark);
+  gap: 1rem;
+}
+
+.featured-card-title {
+  font-size: 1rem;
+  color: var(--clr-black-dark);
+}
+
+.featured-card-number {
+  font-size: 1.5rem;
+}
+
+.featured-card-div:nth-child(1) {
+  color: rgb(113, 0, 0);
+  background-color: rgba(239, 37, 37, 0.5);
+}
+
+.featured-card-div:nth-child(2) {
+  color: rgb(0, 88, 66);
+  background-color: rgba(37, 165, 133, 0.5);
+}
+
+.featured-card-div:nth-child(3) {
+  color: rgb(132, 79, 0);
+  background-color: rgba(184, 110, 0, 0.5);
+}
+
+.featured-card-div:nth-child(4) {
+  color: #330063;
+  background-color: rgba(91, 81, 155, 0.5);
+}
+
+@media screen and (width > 1200px) {
+  .dashboard-bg {
+    width: 85dvw;
+  }
+}
