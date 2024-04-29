@@ -1,5 +1,5 @@
 import axios from "axios";
-import {useContext} from "react";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -14,7 +14,7 @@ const Login = () => {
     handleSubmit,
   } = useForm();
 
-  const {baseUrl} = useContext(BaseUrlContext);
+  const { baseUrl } = useContext(BaseUrlContext);
 
   const onSubmit = async (data) => {
     try {
@@ -75,14 +75,14 @@ const Login = () => {
           Login
         </button>
         <NavLink to="/signup">Create a new account</NavLink>
-      </form>
-      <div className="credentials-div">
-        Demo Credentials
-        <div className="credentials">
-          demo@gmail.com <br />
-          demo
+        <div className="credentials-div">
+          Guest Credentials
+          <div className="credentials">
+            demo@gmail.com <br />
+            demo
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

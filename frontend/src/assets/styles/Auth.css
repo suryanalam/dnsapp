@@ -9,6 +9,7 @@
 }
 
 .form-container {
+  position: relative;
   padding: 2rem;
   width: 400px;
   display: flex;
@@ -79,9 +80,9 @@
 
 .credentials-div{
   position: absolute;
-  padding: 1rem;
-  top: 20px;
-  right: 20px;
+  padding: 0.5rem;
+  bottom: -40px;
+  left: 0;
   font-size: var(--fs-x-small);
   background-color: var(--clr-white-dark);
   cursor: pointer;
@@ -89,9 +90,9 @@
 
 .credentials{
   position: absolute;
-  padding: 1rem;
-  top: 50px;
-  right: 0;
+  padding: 0.5rem;
+  top: 100%;
+  left: 0;
   display: none;
   line-height: 1.5rem;
   font-size: var(--fs-x-small);

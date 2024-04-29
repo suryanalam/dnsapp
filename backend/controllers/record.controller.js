@@ -1,4 +1,21 @@
+const {
+  Route53Client,
+  ListResourceRecordSetsCommand,
+  ChangeResourceRecordSetsCommand,
+} = require("@aws-sdk/client-route-53");
 let mongoose = require("mongoose");
+require('dotenv').config()
+
+const HostedZoneId = process.env.AWS_HOSTED_ZONE_ID;
+const config = {
+  region: "us-east-1",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_ACCESS_SECREY_KEY,
+  },
+};
+
+const client = new Route53Client(config);
 const Record = mongoose.model("Record");
 
 const addRecord = async (req, res) => {
@@ -29,20 +46,42 @@ const addRecord = async (req, res) => {
 };
 
 const getAllRecord = async (req, res) => {
-  let { id } = req.user;
 
-  let recordData = await Record.find({ uid: id });
+  const input = {
+    HostedZoneId: HostedZoneId,
+  };
 
-  if (recordData) {
+  const command = new ListResourceRecordSetsCommand(input);
+  const response = await client.send(command);
+  let records = response.ResourceRecordSets;
+
+  if(records){
     return res.status(200).send({
       message: "Records found successfully !!",
-      data: recordData,
+      data: records,
     });
-  } else {
+  }else{
     return res.status(500).send({
       message: "Error while fetching records !!",
     });
   }
+
+
+
+  // let { id } = req.user;
+
+  // let recordData = await Record.find({ uid: id });
+
+  // if (recordData) {
+  //   return res.status(200).send({
+  //     message: "Records found successfully !!",
+  //     data: recordData,
+  //   });
+  // } else {
+  //   return res.status(500).send({
+  //     message: "Error while fetching records !!",
+  //   });
+  // }
 };
 
 const getRecord = async (req, res) => {

@@ -76,9 +76,18 @@ const Records = () => {
   };
 
   const columns = [
-    { field: "name", headerName: "NAME", width: 200, flex: 0.75 },
-    { field: "value", headerName: "VALUE", width: 200, flex: 1.5 },
-    { field: "type", headerName: "TYPE", width: 100, flex: 0.75 },
+    { field: "Name", headerName: "NAME", width: 200, flex: 0.75 },
+    { field: "Type", headerName: "TYPE", width: 100, flex: 0.75 },
+    {
+      field: "Value",
+      headerName: "VALUE",
+      width: 200,
+      flex: 1.5,
+      valueGetter: (params) => {
+        const record = params.row; 
+        return record.recordValues[0].value;
+      },
+    },
     {
       field: "action",
       headerName: "Action",
@@ -125,11 +134,10 @@ const Records = () => {
               pageSizeOptions={[5, 10]}
               disableRowSelectionOnClick
               sx={{
-                "& .css-yrdy0g-MuiDataGrid-columnHeaderRow":
-                  {
-                    color: "var(--clr-white-dark)",
-                    background: "var(--clr-primary) !important",
-                  },
+                "& .css-yrdy0g-MuiDataGrid-columnHeaderRow": {
+                  color: "var(--clr-white-dark)",
+                  background: "var(--clr-primary) !important",
+                },
               }}
             />
           </Box>
