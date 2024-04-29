@@ -19,6 +19,7 @@ const client = new Route53Client(config);
 const Record = mongoose.model("Record");
 
 const addRecord = async (req, res) => {
+
   let { id } = req.user;
   let { name, value, type } = req.body;
 
@@ -26,6 +27,37 @@ const addRecord = async (req, res) => {
     return res.status(500).send({
       message: "please enter all the required fields !!",
     });
+  }
+
+  const input = {
+    HostedZoneId: HostedZoneId,
+    ChangeBatch: {
+      Comment: "Creating a New Record",
+      Changes: [
+        {
+          Action: "CREATE",
+          ResourceRecordSet: {
+            Name: name,
+            Type: type,
+            TTL: 500,
+            ResourceRecords: [
+              {
+                Value: value,
+              },
+            ],
+          },
+        },
+      ],
+    },
+  };
+
+  const command = new ChangeResourceRecordSetsCommand(input);
+  const response = await client.send(command);
+
+  if(response.$metadata.httpStatusCode !== 200){
+    return res.send({
+      message: "Error while adding a Record in AWS !!",
+    })
   }
 
   let newRecord = { uid: id, name, value, type };
@@ -40,50 +72,26 @@ const addRecord = async (req, res) => {
     });
   } else {
     return res.status(500).send({
-      message: "Error while adding a Record !!",
+      message: "Error while adding a Record in DB !!",
     });
   }
 };
 
 const getAllRecord = async (req, res) => {
+  let { id } = req.user;
 
-  const input = {
-    HostedZoneId: HostedZoneId,
-  };
+  let recordData = await Record.find({ uid: id });
 
-  const command = new ListResourceRecordSetsCommand(input);
-  const response = await client.send(command);
-  let records = response.ResourceRecordSets;
-
-  console.log(records);
-
-  if(records){
+  if (recordData) {
     return res.status(200).send({
       message: "Records found successfully !!",
-      data: records,
+      data: recordData,
     });
-  }else{
+  } else {
     return res.status(500).send({
       message: "Error while fetching records !!",
     });
   }
-
-
-
-  // let { id } = req.user;
-
-  // let recordData = await Record.find({ uid: id });
-
-  // if (recordData) {
-  //   return res.status(200).send({
-  //     message: "Records found successfully !!",
-  //     data: recordData,
-  //   });
-  // } else {
-  //   return res.status(500).send({
-  //     message: "Error while fetching records !!",
-  //   });
-  // }
 };
 
 const getRecord = async (req, res) => {
@@ -113,6 +121,58 @@ const updateRecord = async (req, res) => {
     });
   }
 
+  let recordPrevData = await Record.findOne({ _id: id });
+
+  if(!recordPrevData){
+    return res.status(404).send({
+      message: "Record not found !!",
+    });
+  }
+
+  const input = {
+    HostedZoneId: HostedZoneId,
+    ChangeBatch: {
+      Comment: "Updating an Existing Record (using Indirect method)",
+      Changes: [
+        {
+          Action: "DELETE",
+          ResourceRecordSet: {
+            Name: recordPrevData.name,
+            Type: recordPrevData.type,
+            TTL: 300,
+            ResourceRecords: [
+              {
+                Value: recordPrevData.value,
+              },
+            ],
+          },
+        },
+        {
+          Action: "CREATE",
+          ResourceRecordSet: {
+            Name: name,
+            Type: type,
+            TTL: 300,
+            ResourceRecords: [
+              {
+                Value: value,
+              },
+            ],
+          },
+        },
+      ],
+    },
+  };
+
+  const command = new ChangeResourceRecordSetsCommand(input);
+  const response = await client.send(command);
+
+  if(response.$metadata.httpStatusCode !== 200){
+    return res.send({
+      message: "Error while updating a Record in AWS !!",
+    })
+  }
+
   let updatedRecord = { name, value, type };
 
   let recordData = await Record.findOneAndUpdate(
@@ -135,6 +195,45 @@ const updateRecord = async (req, res) => {
 
 const deleteRecord = async (req, res) => {
   let id = req.params.id;
+
+  let recordPrevData = await Record.findOne({ _id: id });
+
+  if(!recordPrevData){
+    return res.status(404).send({
+      message: "Record not found !!",
+    });
+  }
+
+  const input = {
+    HostedZoneId: HostedZoneId,
+    ChangeBatch: {
+      Comment: "Deleting an Existing Record",
+      Changes: [
+        {
+          Action: "DELETE",
+          ResourceRecordSet: {
+            Name: recordPrevData.name,
+            Type: recordPrevData.type,
+            TTL: 300,
+            ResourceRecords: [
+              {
+                Value: recordPrevData.value,
+              },
+            ],
+          },
+        },
+      ],
+    },
+  };
+
+  const command = new ChangeResourceRecordSetsCommand(input);
+  const response = await client.send(command);
+
+  if(response.$metadata.httpStatusCode !== 200){
+    return res.send({
+      message: "Error while deleting a Record in AWS !!",
+    })
+  }
 
   let recordData = await Record.findOneAndDelete({ _id: id });
 
