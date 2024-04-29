@@ -125,6 +125,9 @@ const updateRecord = async (req, res) => {
   console.log('new data: ',name, type, value);
   console.log('prev data: ',recordPrevData.name, recordPrevData.type, recordPrevData.value);
 
+  const prevRecordName = `${recordPrevData.name}.`;
+  console.log(prevRecordName);
+
   if(!recordPrevData){
     return res.status(404).send({
       message: "Record not found !!",
@@ -139,7 +142,7 @@ const updateRecord = async (req, res) => {
         {
           Action: "DELETE",
           ResourceRecordSet: {
-            Name: `${recordPrevData.name}.`,
+            Name: prevRecordName,
             Type: recordPrevData.type,
             TTL: 300,
             ResourceRecords: [
@@ -206,6 +209,9 @@ const deleteRecord = async (req, res) => {
     });
   }
 
+  const prevRecordName = `${recordPrevData.name}.`;
+  console.log(prevRecordName);
+
   const input = {
     HostedZoneId: HostedZoneId,
     ChangeBatch: {
@@ -214,7 +220,7 @@ const deleteRecord = async (req, res) => {
         {
           Action: "DELETE",
           ResourceRecordSet: {
-            Name: `${recordPrevData.name}.`,
+            Name: prevRecordName,
             Type: recordPrevData.type,
             TTL: 300,
             ResourceRecords: [
