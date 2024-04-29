@@ -1,10 +1,11 @@
-import React, { useEffect, useContext } from "react";
-import axios from "axios";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import { useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import axios from "axios";
 
 import { RecordContext } from "../contexts/RecordContext";
+import { BaseUrlContext } from "../contexts/BaseUrlContext";
 
 const style = {
   position: "absolute",
@@ -27,7 +28,8 @@ const RecordModal = ({ open, handleClose }) => {
     setValue,
   } = useForm();
 
-  let { records, setRecords, record, setRecord } = useContext(RecordContext);
+  const { baseUrl } = useContext(BaseUrlContext);
+  const { records, setRecords, record, setRecord } = useContext(RecordContext);
 
   const token = localStorage.getItem("token");
   const options = {
@@ -53,19 +55,15 @@ const RecordModal = ({ open, handleClose }) => {
   const handleCreateRecord = async (data) => {
     let updatedRecords = [];
 
-    let resp = await axios.post(
-      "https://dnsapp-iulk.onrender.com/records/",
-      data,
-      options
-    );
+    let resp = await axios.post(`${baseUrl}/records/`, data, options);
     console.log("New record data from response", resp);
 
     if (resp?.data?.data) {
       reset();
 
-      if(records.length > 0){
-        updatedRecords = [...records, resp.data.data]
-      }else{
+      if (records.length > 0) {
+        updatedRecords = [...records, resp.data.data];
+      } else {
         updatedRecords.push(resp.data.data);
       }
 
@@ -78,7 +76,7 @@ const RecordModal = ({ open, handleClose }) => {
 
   const handleUpdateRecord = async (data) => {
     let resp = await axios.put(
-      `https://dnsapp-iulk.onrender.com/records/${record._id}`,
+      `${baseUrl}/records/${record._id}`,
       data,
       options
     );

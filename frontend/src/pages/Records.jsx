@@ -9,13 +9,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useFetch } from "../hooks/useFetch";
 import { RecordContext } from "../contexts/RecordContext";
+import { BaseUrlContext } from "../contexts/BaseUrlContext";
 
 import "../assets/styles/Records.css";
 import RecordModal from "../components/RecordModal";
 
 const Records = () => {
   const [open, setOpen] = useState(false);
-  let { records, setRecords, setRecord } = useContext(RecordContext);
+  const { baseUrl } = useContext(BaseUrlContext);
+  const { records, setRecords, setRecord } = useContext(RecordContext);
 
   const token = localStorage.getItem("token");
   const options = {
@@ -24,10 +26,8 @@ const Records = () => {
     },
   };
 
-  const { loading, error, data } = useFetch(
-    "https://dnsapp-iulk.onrender.com/records/",
-    token
-  );
+  console.log(baseUrl);
+  const { loading, error, data } = useFetch(`${baseUrl}/records/`, token);
 
   useEffect(() => {
     if (data.length > 0) {

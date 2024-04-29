@@ -1,10 +1,9 @@
 import { Routes, Route } from "react-router-dom";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
 
-import "./App.css";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import Dashboard from "./pages/Dashboard";
-import ProtectedRoutes from "./utils/ProtectedRoutes";
 import Records from "./pages/Records";
 
 function App() {

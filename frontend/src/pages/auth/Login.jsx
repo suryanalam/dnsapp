@@ -1,9 +1,10 @@
-import React from "react";
 import axios from "axios";
+import {useContext} from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import "../../assets/styles/Auth.css";
+import { BaseUrlContext } from "../../contexts/BaseUrlContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,11 +14,13 @@ const Login = () => {
     handleSubmit,
   } = useForm();
 
+  const {baseUrl} = useContext(BaseUrlContext);
+
   const onSubmit = async (data) => {
     console.log("data from login form", data);
 
     try {
-      const resp = await axios.post(`https://dnsapp-iulk.onrender.com/login`, data);
+      const resp = await axios.post(`${baseUrl}/login`, data);
       console.log("login data from response", resp);
 
       if (resp?.data?.token) {
