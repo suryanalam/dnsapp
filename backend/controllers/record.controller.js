@@ -122,6 +122,7 @@ const updateRecord = async (req, res) => {
   }
 
   let recordPrevData = await Record.findOne({ _id: id });
+  console.log('prev data: ',recordPrevData);
 
   if(!recordPrevData){
     return res.status(404).send({
