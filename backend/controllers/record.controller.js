@@ -139,7 +139,7 @@ const updateRecord = async (req, res) => {
         {
           Action: "DELETE",
           ResourceRecordSet: {
-            Name: recordPrevData.name,
+            Name: `${recordPrevData.name}.`,
             Type: recordPrevData.type,
             TTL: 300,
             ResourceRecords: [
@@ -214,7 +214,7 @@ const deleteRecord = async (req, res) => {
         {
           Action: "DELETE",
           ResourceRecordSet: {
-            Name: recordPrevData.name,
+            Name: `${recordPrevData.name}.`,
             Type: recordPrevData.type,
             TTL: 300,
             ResourceRecords: [
