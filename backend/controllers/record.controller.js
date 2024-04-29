@@ -4,14 +4,14 @@ const {
   ChangeResourceRecordSetsCommand,
 } = require("@aws-sdk/client-route-53");
 let mongoose = require("mongoose");
-require('dotenv').config()
+require("dotenv").config();
 
 const HostedZoneId = process.env.AWS_HOSTED_ZONE_ID;
 const config = {
   region: "us-east-1",
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_ACCESS_SECREY_KEY,
+    secretAccessKey: process.env.AWS_ACCESS_SECRET_KEY,
   },
 };
 
@@ -54,6 +54,8 @@ const getAllRecord = async (req, res) => {
   const command = new ListResourceRecordSetsCommand(input);
   const response = await client.send(command);
   let records = response.ResourceRecordSets;
+
+  console.log(records);
 
   if(records){
     return res.status(200).send({
