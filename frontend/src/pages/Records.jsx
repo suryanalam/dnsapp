@@ -59,7 +59,7 @@ const Records = () => {
 
     try {
       let resp = await axios.delete(
-        `http://localhost:5000/records/${id}`,
+        `${baseUrl}/records/${id}`,
         options
       );
       console.log("delete resp: ", resp);

@@ -66,7 +66,7 @@ const RecordModal = ({ open, handleClose }) => {
       } else {
         updatedRecords.push(resp.data.data);
       }
-
+      console.log('updated records after creating new record: ',updatedRecords);
       setRecords(updatedRecords);
       handleClose();
     } else {
@@ -91,6 +91,7 @@ const RecordModal = ({ open, handleClose }) => {
         }
         return item;
       });
+      console.log('updated records after updating an existing record: ',updatedRecords);
       setRecords(updatedRecords);
       handleClose();
     } else {
