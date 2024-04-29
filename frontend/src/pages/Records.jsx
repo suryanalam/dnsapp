@@ -76,17 +76,13 @@ const Records = () => {
   };
 
   const columns = [
-    { field: "Name", headerName: "NAME", width: 200, flex: 0.75 },
-    { field: "Type", headerName: "TYPE", width: 100, flex: 0.75 },
+    { field: "name", headerName: "NAME", width: 200, flex: 0.75 },
+    { field: "type", headerName: "TYPE", width: 100, flex: 0.75 },
     {
-      field: "Value",
+      field: "value",
       headerName: "VALUE",
       width: 200,
       flex: 1.5,
-      valueGetter: (params) => {
-        const record = params.row; 
-        return record.recordValues[0].value;
-      },
     },
     {
       field: "action",
