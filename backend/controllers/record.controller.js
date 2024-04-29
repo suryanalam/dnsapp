@@ -126,7 +126,6 @@ const updateRecord = async (req, res) => {
   console.log('prev data: ',recordPrevData.name, recordPrevData.type, recordPrevData.value);
 
   const prevRecordName = `${recordPrevData.name}.`;
-  console.log(prevRecordName);
 
   if(!recordPrevData){
     return res.status(404).send({
@@ -210,7 +209,6 @@ const deleteRecord = async (req, res) => {
   }
 
   const prevRecordName = `${recordPrevData.name}.`;
-  console.log(prevRecordName);
 
   const input = {
     HostedZoneId: HostedZoneId,

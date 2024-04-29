@@ -17,11 +17,9 @@ const Signup = () => {
   const {baseUrl} = useContext(BaseUrlContext);
 
   const onSubmit = async (data) => {
-    console.log("data from signup form", data);
     
     try {
       const resp = await axios.post(`${baseUrl}/signup`, data);
-      console.log("signup data from response", resp);
 
       if (resp?.data?.token) {
         localStorage.setItem("token",resp?.data?.token);

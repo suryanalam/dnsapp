@@ -56,7 +56,6 @@ const RecordModal = ({ open, handleClose }) => {
     let updatedRecords = [];
 
     let resp = await axios.post(`${baseUrl}/records/`, data, options);
-    console.log("New record data from response", resp);
 
     if (resp?.data?.data) {
       reset();
@@ -66,10 +65,6 @@ const RecordModal = ({ open, handleClose }) => {
       } else {
         updatedRecords.push(resp.data.data);
       }
-      console.log(
-        "updated records after creating new record: ",
-        updatedRecords
-      );
       setRecords(updatedRecords);
       handleClose();
     } else {
@@ -83,7 +78,6 @@ const RecordModal = ({ open, handleClose }) => {
       data,
       options
     );
-    console.log("Updated record data from response", resp);
 
     if (resp?.data?.data) {
       reset();
@@ -94,10 +88,7 @@ const RecordModal = ({ open, handleClose }) => {
         }
         return item;
       });
-      console.log(
-        "updated records after updating an existing record: ",
-        updatedRecords
-      );
+
       setRecords(updatedRecords);
       handleClose();
     } else {
@@ -106,8 +97,6 @@ const RecordModal = ({ open, handleClose }) => {
   };
 
   const onSubmit = async (data) => {
-    console.log("record data from form => ", data);
-
     if (record?._id) {
       handleUpdateRecord(data);
     } else {
@@ -179,7 +168,7 @@ const RecordModal = ({ open, handleClose }) => {
             <input
               className="input-field"
               type="text"
-              pattern="^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9]{1,3}\.){3}[0-9]{1,3})|[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.[a-zA-Z]{2,})$"
+              pattern="^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))|([a-zA-Z0-9][a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})$"
               {...register("value", {
                 required: "Value is required",
               })}

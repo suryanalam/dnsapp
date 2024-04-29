@@ -61,7 +61,6 @@ const Records = () => {
 
     try {
       let resp = await axios.delete(`${baseUrl}/records/${id}`, options);
-      console.log("delete resp: ", resp);
 
       if (!resp) {
         alert("Response not found !!");
@@ -71,7 +70,6 @@ const Records = () => {
     }
 
     let updatedRecords = records.filter(({ _id }) => _id !== id);
-    console.log("updated record afeter deletion: ", updatedRecords);
     setRecords(updatedRecords);
   };
 
