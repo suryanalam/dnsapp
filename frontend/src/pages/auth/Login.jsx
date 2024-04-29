@@ -17,11 +17,8 @@ const Login = () => {
   const {baseUrl} = useContext(BaseUrlContext);
 
   const onSubmit = async (data) => {
-    console.log("data from login form", data);
-
     try {
       const resp = await axios.post(`${baseUrl}/login`, data);
-      console.log("login data from response", resp);
 
       if (resp?.data?.token) {
         localStorage.setItem("token", resp?.data?.token);
@@ -83,7 +80,7 @@ const Login = () => {
         Demo Credentials
         <div className="credentials">
           demo@gmail.com <br />
-          demo123
+          demo
         </div>
       </div>
     </div>

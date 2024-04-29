@@ -26,14 +26,23 @@ const Records = () => {
     },
   };
 
-  console.log(baseUrl);
   const { loading, error, data } = useFetch(`${baseUrl}/records/`, token);
 
-  useEffect(() => {
-    if (data.length > 0) {
-      setRecords(data);
-    }
-  }, [data, setRecords]);
+  if (loading) {
+    return <p className="loading-text">Loading...</p>;
+  }
+
+  if (error) {
+    return (
+      <div className="error-div">
+        Error: <span>{error}</span>
+      </div>
+    );
+  }
+
+  if (data) {
+    setRecords(data);
+  }
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -93,18 +102,6 @@ const Records = () => {
     },
   ];
 
-  if (loading) {
-    return <p className="loading-text">Loading...</p>;
-  }
-
-  if (error) {
-    return (
-      <div className="error-div">
-        Error: <span>{error}</span>
-      </div>
-    );
-  }
-
   return (
     <div className="records-container-bg">
       <div className="records-container-wrapper">
@@ -113,8 +110,8 @@ const Records = () => {
           New Record
         </button>
         <RecordModal open={open} handleClose={handleClose} />
-        <Box className="records-container">
-          {records.length > 0 && (
+        {records.length > 0 && (
+          <Box className="records-container">
             <DataGrid
               rows={records}
               columns={columns}
@@ -127,11 +124,10 @@ const Records = () => {
               }}
               getRowId={(row) => row._id}
               pageSizeOptions={[5, 10]}
-              // checkboxSelection
               disableRowSelectionOnClick
             />
-          )}
-        </Box>
+          </Box>
+        )}
       </div>
     </div>
   );
