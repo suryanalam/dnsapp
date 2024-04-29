@@ -39,12 +39,6 @@ app.get("/", function (req, res) {
   res.send("welcome to dnsapp api");
 });
 
-app.get('/api/getBaseUrl',(req,res)=>{
-  res.send({
-    baseUrl: "https://dnsapp-iulk.onrender.com"
-  })
-})
-
 app.use(authRouter); //Authentication Router
 app.use('/records',recordRouter); //DNS Records Router
 

@@ -28,6 +28,12 @@ const Records = () => {
 
   const { loading, error, data } = useFetch(`${baseUrl}/records/`, token);
 
+  useEffect(() => {
+    if (data) {
+      setRecords(data);
+    }
+  }, [data, setRecords]);
+
   if (loading) {
     return <p className="loading-text">Loading...</p>;
   }
@@ -38,10 +44,6 @@ const Records = () => {
         Error: <span>{error}</span>
       </div>
     );
-  }
-
-  if (data) {
-    setRecords(data);
   }
 
   const handleOpen = () => setOpen(true);
@@ -58,10 +60,7 @@ const Records = () => {
     }
 
     try {
-      let resp = await axios.delete(
-        `${baseUrl}/records/${id}`,
-        options
-      );
+      let resp = await axios.delete(`${baseUrl}/records/${id}`, options);
       console.log("delete resp: ", resp);
 
       if (!resp) {
@@ -125,6 +124,13 @@ const Records = () => {
               getRowId={(row) => row._id}
               pageSizeOptions={[5, 10]}
               disableRowSelectionOnClick
+              sx={{
+                "& .css-yrdy0g-MuiDataGrid-columnHeaderRow":
+                  {
+                    color: "var(--clr-white-dark)",
+                    background: "var(--clr-primary) !important",
+                  },
+              }}
             />
           </Box>
         )}

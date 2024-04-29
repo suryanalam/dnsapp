@@ -1,26 +1,9 @@
-import React, { createContext, useState, useEffect } from 'react';
-import axios from "axios";
-
-let cachedBaseUrl = null;
+import React, { createContext, useState} from 'react';
 export const BaseUrlContext = createContext();
 
 export const BaseUrlProvider = ({ children }) => {
-  const [baseUrl, setBaseUrl] = useState("");
-
-  useEffect(() => {
-    async function fetchBaseUrl() {
-      if (!cachedBaseUrl) { 
-        try {
-          const response = await axios.get('https://dnsapp-iulk.onrender.com/api/getBaseUrl');
-          cachedBaseUrl = response.data.baseUrl;
-          setBaseUrl(cachedBaseUrl);
-        } catch (error) {
-          console.error('Error fetching base URL:', error);
-        }
-      }
-    }
-    fetchBaseUrl();
-  }, []);
+  // eslint-disable-next-line no-unused-vars
+  const [baseUrl, setBaseUrl] = useState("https://dnsapp-iulk.onrender.com");
 
   return (
     <BaseUrlContext.Provider value={{ baseUrl }}>

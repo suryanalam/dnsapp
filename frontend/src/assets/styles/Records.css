@@ -33,11 +33,6 @@
   background-color: var(--clr-white-dark);
 }
 
-.css-yrdy0g-MuiDataGrid-columnHeaderRow {
-  color: var(--clr-white-dark);
-  background: var(--clr-primary) !important;
-}
-
 .edit-icon{
   cursor: pointer;
   margin-right: 1rem;
