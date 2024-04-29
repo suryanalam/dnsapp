@@ -168,7 +168,7 @@ const RecordModal = ({ open, handleClose }) => {
             <input
               className="input-field"
               type="text"
-              pattern="^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))|([a-zA-Z0-9][a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})$"
+              pattern="^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))|([a-zA-Z][a-zA-Z0-9.]*)$"
               {...register("value", {
                 required: "Value is required",
               })}
