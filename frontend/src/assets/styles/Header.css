@@ -13,8 +13,10 @@
 }
 
 .logo {
+  font-weight: bold;
   font-size: var(--fs-medium);
   color: var(--clr-primary);
+  cursor: pointer;
 }
 
 .header-action-div {

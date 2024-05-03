@@ -2,30 +2,30 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export const useFetch = (url, token) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError ] = useState();
   let [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(false);
       try {
         let resp = await axios.get(url, {
           headers: {
             Authorization: token,
           },
         });
-        setData(resp?.data?.data);
+
+        if(!resp?.data?.data){
+          alert('Records not found !!')
+        }
+
+        setData(resp.data.data);
       } catch (err) {
         console.log('Error while fetching records: ',err)
-        setError(err.response.data.message);
-      } finally{
-        setLoading(false);
+        alert("Error while fetching records,check console !!")
       }
     };
 
     fetchData();
   }, [url, token]);
 
-  return { loading, error, data };
+  return { data };
 };

@@ -15,18 +15,16 @@ import "../assets/styles/Records.css";
 import RecordModal from "../components/RecordModal";
 
 const Records = () => {
-  const [open, setOpen] = useState(false);
-  const { baseUrl } = useContext(BaseUrlContext);
-  const { records, setRecords, setRecord } = useContext(RecordContext);
-
   const token = localStorage.getItem("token");
-  const options = {
-    headers: {
-      Authorization: token,
-    },
-  };
 
-  const { loading, error, data } = useFetch(`${baseUrl}/records/`, token);
+  const [open, setOpen] = useState(false);
+  const [filteredRecords, setFilteredRecords] = useState(null);
+
+  const { baseUrl } = useContext(BaseUrlContext);
+  const { hostedZones, setHostedZones, records, setRecords, setRecord } =
+    useContext(RecordContext);
+
+  const { data } = useFetch(`${baseUrl}/records/`, token);
 
   useEffect(() => {
     if (data) {
@@ -34,17 +32,27 @@ const Records = () => {
     }
   }, [data, setRecords]);
 
-  if (loading) {
-    return <p className="loading-text">Loading...</p>;
-  }
+  useEffect(() => {
+    const getHostedZones = async () => {
+      try {
+        let resp = await axios.get(`${baseUrl}/hosted_zones/`, {
+          headers: {
+            Authorization: token,
+          },
+        });
 
-  if (error) {
-    return (
-      <div className="error-div">
-        Error: <span>{error}</span>
-      </div>
-    );
-  }
+        if (!resp?.data?.data) {
+          alert("hosted zones not found");
+        }
+
+        setHostedZones(resp.data.data);
+      } catch (err) {
+        console.log("Error while fetching hosted zones => ", err);
+        alert("Error while fetching hosted zones, check the console !!");
+      }
+    };
+    getHostedZones();
+  }, [baseUrl, token, setHostedZones]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -55,38 +63,56 @@ const Records = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure?")) {
+    if (!window.confirm("Do you really want to delete?")) {
       return;
     }
 
     try {
-      let resp = await axios.delete(`${baseUrl}/records/${id}`, options);
+      let resp = await axios.delete(`${baseUrl}/records/${id}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
 
       if (!resp) {
         alert("Response not found !!");
       }
     } catch (err) {
       console.log("Error while deleting an record => ", err);
+      alert("Error while deleting an record, check the console !!");
     }
 
     let updatedRecords = records.filter(({ _id }) => _id !== id);
     setRecords(updatedRecords);
   };
 
+  const handleFilterRecords = async (e) => {
+    if(e.target.value === ""){
+      setFilteredRecords(null);
+      return ;
+    }
+
+    let filteredData = records.filter(
+      (record) => record.hosted_zone_id._id === e.target.value
+    );
+    setFilteredRecords(filteredData);
+  };
+
   const columns = [
-    { field: "name", headerName: "NAME", width: 200, flex: 0.75 },
-    { field: "type", headerName: "TYPE", width: 100, flex: 0.75 },
+    { field: "name", headerName: "NAME", width: 200, flex: 1 },
+    { field: "type", headerName: "TYPE", width: 200, flex: 1 },
     {
       field: "value",
       headerName: "VALUE",
       width: 200,
-      flex: 1.5,
+      flex: 1,
     },
     {
       field: "action",
       headerName: "Action",
       headerClassName: "actionsBar",
-      width: 100,
+      width: 200,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
@@ -105,17 +131,29 @@ const Records = () => {
   ];
 
   return (
-    <div className="records-container-bg">
+    <>
       <div className="records-container-wrapper">
-        <button type="button" className="record-btn" onClick={handleOpen}>
-          <Add sx={{ fontSize: 18 }} />
-          New Record
-        </button>
-        <RecordModal open={open} handleClose={handleClose} />
+        <div className="records-header-container">
+          <button type="button" className="record-btn" onClick={handleOpen}>
+            <Add sx={{ fontSize: 18 }} />
+            New Record
+          </button>
+          <select
+            className="records-filter-dropdown"
+            onChange={handleFilterRecords}
+          >
+            <option value="">Select Hosted Zone</option>
+            {hostedZones.map((item) => (
+              <option key={item._id} value={item._id}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+        </div>
         {records.length > 0 && (
           <Box className="records-container">
             <DataGrid
-              rows={records}
+              rows={filteredRecords === null ? records : filteredRecords}
               columns={columns}
               initialState={{
                 pagination: {
@@ -137,7 +175,9 @@ const Records = () => {
           </Box>
         )}
       </div>
-    </div>
+
+      {open && <RecordModal open={open} handleClose={handleClose} />}
+    </>
   );
 };
 

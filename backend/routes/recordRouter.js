@@ -4,6 +4,7 @@ const {
   addRecord,
   getAllRecord,
   getRecord,
+  getRecordsByHostedZone,
   updateRecord,
   deleteRecord,
 } = require("../controllers/record.controller");

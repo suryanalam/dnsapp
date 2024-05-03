@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -20,6 +20,13 @@ const style = {
 };
 
 const RecordModal = ({ open, handleClose }) => {
+  const token = localStorage.getItem("token");
+  const options = {
+    headers: {
+      Authorization: token,
+    },
+  };
+
   const {
     register,
     formState: { errors },
@@ -28,60 +35,79 @@ const RecordModal = ({ open, handleClose }) => {
     setValue,
   } = useForm();
 
-  const { baseUrl } = useContext(BaseUrlContext);
-  const { records, setRecords, record, setRecord } = useContext(RecordContext);
+  const [readOnlyAccess, setReadOnlyAccess] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [dnsTypes, setDnsTypes] = useState([
+    "A",
+    "AAAA",
+    "CNAME",
+    "MX",
+    "NS",
+    "SOA",
+    "SRV",
+    "PTR",
+    "TXT",
+    "DNSSEC",
+  ]);
 
-  const token = localStorage.getItem("token");
-  const options = {
-    headers: {
-      Authorization: token,
-    },
-  };
+  const { baseUrl } = useContext(BaseUrlContext);
+  const { hostedZones, records, setRecords, record, setRecord } =
+    useContext(RecordContext);
 
   useEffect(() => {
-    if (record?._id) {
+    if (Object.keys(record).length !== 0) {
+      setReadOnlyAccess(true);
       setValue("name", record.name);
       setValue("type", record.type);
       setValue("value", record.value);
+      setValue("hosted_zone_id", record.hosted_zone_id._id);
     }
   }, [record, setValue]);
 
   const handleModalClose = () => {
     reset();
     setRecord({});
+    setReadOnlyAccess(false);
     handleClose();
   };
 
   const handleCreateRecord = async (data) => {
     let updatedRecords = [];
 
-    let resp = await axios.post(`${baseUrl}/records/`, data, options);
-
-    if (resp?.data?.data) {
-      reset();
+    try {
+      let resp = await axios.post(`${baseUrl}/records/`, data, options);
+      if (!resp?.data?.data) {
+        alert("Response not found !!");
+      }
 
       if (records.length > 0) {
         updatedRecords = [...records, resp.data.data];
       } else {
         updatedRecords.push(resp.data.data);
       }
+
       setRecords(updatedRecords);
+
+      reset();
       handleClose();
-    } else {
-      alert("Record not found in response");
+    } catch (err) {
+      console.log("Error while creating a record => ", err);
+      alert("Error while creating a record, check console");
     }
   };
 
   const handleUpdateRecord = async (data) => {
-    let resp = await axios.put(
-      `${baseUrl}/records/${record._id}`,
-      data,
-      options
-    );
+    try {
+      let resp = await axios.put(
+        `${baseUrl}/records/${record._id}`,
+        data,
+        options
+      );
 
-    if (resp?.data?.data) {
-      reset();
-      setRecord({});
+      if (!resp?.data?.data) {
+        alert("Response not found !!");
+      }
+
       let updatedRecords = records.map((item) => {
         if (item._id === resp.data.data._id) {
           item = resp.data.data;
@@ -90,14 +116,19 @@ const RecordModal = ({ open, handleClose }) => {
       });
 
       setRecords(updatedRecords);
+
+      reset();
+      setRecord({});
+      setReadOnlyAccess(false);
       handleClose();
-    } else {
-      alert("Record not found in response");
+    } catch (err) {
+      console.log("Error while updating a record => ", err);
+      alert("Error while updating a record, check console");
     }
   };
 
   const onSubmit = async (data) => {
-    if (record?._id) {
+    if (Object.keys(record).length !== 0) {
       handleUpdateRecord(data);
     } else {
       handleCreateRecord(data);
@@ -113,7 +144,34 @@ const RecordModal = ({ open, handleClose }) => {
     >
       <Box sx={style}>
         <form onSubmit={handleSubmit(onSubmit)} className="form-container">
-          <h4 className="form-tite">{record._id ? "Edit" : "Create"} Record</h4>
+          <h4 className="form-tite">
+            {Object.keys(record).length === 0 ? "Create" : "Edit"} Record
+          </h4>
+          <div className="form-group">
+            <label htmlFor="hosted_zone_id" className="input-label">
+              Hosted Zone
+            </label>
+            <select
+              className="input-field"
+              disabled={readOnlyAccess}
+              {...register("hosted_zone_id", {
+                required: "Hosted Zone is required",
+              })}
+            >
+              <option value="">Select</option>
+              {hostedZones.map((item) => (
+                <option key={item._id} value={item._id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+
+            {errors.hosted_zone_id && (
+              <p role="alert" className="alert">
+                {errors.hosted_zone_id.message}
+              </p>
+            )}
+          </div>
           <div className="form-group">
             <label htmlFor="name" className="input-label">
               Name
@@ -137,22 +195,16 @@ const RecordModal = ({ open, handleClose }) => {
             <label htmlFor="type" className="input-label">
               Type
             </label>
-
             <select
               className="input-field"
               {...register("type", { required: "Type is required" })}
             >
               <option value="">Select</option>
-              <option value="A">A</option>
-              <option value="AAAA">AAAA</option>
-              <option value="CNAME">CNAME</option>
-              <option value="MX">MX</option>
-              <option value="NS">NS</option>
-              <option value="PTR">PTR</option>
-              <option value="SOA">SOA</option>
-              <option value="SRV">SRV</option>
-              <option value="TXT">TXT</option>
-              <option value="DNSSEC">DNSSEC</option>
+              {dnsTypes.map((item, index) => (
+                <option key={index} value={item}>
+                  {item}
+                </option>
+              ))}
             </select>
 
             {errors.type && (

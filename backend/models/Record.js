@@ -5,6 +5,10 @@ const recordSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  hosted_zone_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "HostedZone",
+  },
   name: {
     type: String,
     required: true,

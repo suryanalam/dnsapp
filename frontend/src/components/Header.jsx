@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import "../assets/styles/Header.css";
 
@@ -23,7 +23,7 @@ const Header = () => {
 
   return (
     <header className="header-bg">
-      <h4 className="logo">DNS Manager</h4>
+      <NavLink to="/" className="logo">DNS Manager</NavLink>
       <div className="header-action-div">
         <p className="greeting-msg">
           Hello, <span>{payload.name}</span>
