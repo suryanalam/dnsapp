@@ -77,29 +77,3 @@
         width: 90%;
     }
 }
-
-.credentials-div{
-  position: absolute;
-  padding: 0.5rem;
-  bottom: -40px;
-  left: 0;
-  font-size: var(--fs-x-small);
-  background-color: var(--clr-white-dark);
-  cursor: pointer;
-}
-
-.credentials{
-  position: absolute;
-  padding: 0.5rem;
-  top: 100%;
-  left: 0;
-  display: none;
-  line-height: 1.5rem;
-  font-size: var(--fs-x-small);
-  background-color: var(--clr-white-dark);
-}
-
-.credentials-div:hover .credentials{
-  display: block;
-}
-

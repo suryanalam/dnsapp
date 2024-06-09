@@ -75,13 +75,7 @@ const Login = () => {
           Login
         </button>
         <NavLink to="/signup">Create a new account</NavLink>
-        <div className="credentials-div">
-          Guest Credentials
-          <div className="credentials">
-            demo@gmail.com <br />
-            demo
-          </div>
-        </div>
+ 
       </form>
     </div>
   );
